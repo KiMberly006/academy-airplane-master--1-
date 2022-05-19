@@ -1,107 +1,141 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title></title>
+    <title>ACADEMY-AIRPLANE</title>
 </head>
 <body>
-	<style type="text/css">
-		#ocean {
-			background-image: url("ocean.jpg");
-			width: 900px;
-			height: 700px;
-	    }
+    <style type="text/css">
+        #ocean {
+            background-image: url("ocean.jpg");
+            width: 900px;
+            height: 700px;
+        }
+        .player {
+            position: absolute;
+            background-image: url("player.png");
+            width: 70px;
+            height: 75px;
+        }
+        .enemy {
+            position: absolute;
+            background-image: url("enemy.png");
+            width: 70px;
+            height: 75px;
+        }
+        .missile {
+            position: absolute;
+            background-color: rgb(252, 248, 48);
+            width: 2px;
+            height: 10px;
+        }
+    </style>
 
-	    .player	{
-			position: absolute;
-			background-image: url("player.png");
-			width: 70px;
-			height: 75px;
-		}
+    <div id="ocean">
+        <div id="players">
+          <div class="player" style="left: 400px; top: 620px"></div>
+        </div>
+        <div id="enemies">
+          <div class="enemy" style="left: 350px; top: 200px"></div>
+          <div class="enemy" style="left: 450px; top: 250px"></div>
+          <div class="enemy" style="left: 250px; top: 250px"></div>
+          <div class="enemy" style="left: 550px; top: 200px"></div>
+          <div class="enemy" style="left: 150px; top: 200px"></div>
+		  <div class="enemy" style="left: 650px; top: 250px"></div>
+        </div>
+        <div id="missiles"></div>
 		
-		.enemy {
-			position: absolute;
-			background-image: url("enemy.png");
-			width: 70px;
-			height: 75px;
-		}
-	</style> 
+    </div>
 
-<div id= "ocean">
-    <div id="players"></div>
-	<div class="player" style="left: 450px; top: 620px"></div>
-</div>
-   <div id="enemies">
-	<div class="enemy" style="left: 350px; top: 200px"></div>
-	<div class="enemy" style="left: 450px; top: 250px"></div>
-	<div class="enemy" style="left: 250px; top: 250px"></div>
-	<div class="enemy" style="left: 550px; top: 200px"></div>
-	<div class="enemy" style="left: 150px; top: 200px"></div>
-   </div>
-</div>
-	<script type="text/javascript">
-	var player = {
-		left: 450,
-		top: 620
-	}
+    <script type="text/javascript">
     
-	var enemies = [
-		{left: 350, top: 200},
-		{left: 450, top: 250},
-		{left: 550, top: 150},
-		{left: 350, top: 350}
-]
-
-function drawPlayer(){
-    content = <div class='player' style='left: "+player.left+"px; top+" px'></div>;
-	document.getElementById("players").innerHTML= content;
-} 
-
-function drawEnemies(){
-    content = "";
-	console.log (enemies);
-	for(var idx=0; idx<enemies.length; idx++) { 
-	   content += "<div class= 'enemy' style= left:"+enemies[idx].left+"px; top:"+enemies[idx].
-	      top+"px' ></div>";
-    } 
-	document.getElementById("enemies").innerHTML = content;
-}	
-
-function moveEnemies(){ 
-	for(var idx=0; idx<enemies.length; idx++){ 
-		enemies[idx].tpo = enemies[idx].top + 5;
-	}
-}		
-
-document.onkeydown = function(e) {    
-	console.log(e);
-	if(e.keyCode == 37){
-		player.left = player.left - 10;
+    var player= {
+        left: 400,
+        top: 620
     }
-	if(e.keyCode == 39){
-		player.left = player.left + 10;
-	}	
-	if(e.keyCode == 38 && player.top > 500) {
-		player.top = player.top - 10;
-	}
-	if(e.keyCode == 40 && player.top < 625){
-		player.top = player.top + 10;
-	}
-	drawPlayer();
-}	
 
-function gameLoop(){
-	console.log("gameLoop is running!")
-    drawPlayer();
+    var enemies = [
+        {left: 350, top: 200},
+        {left: 450, top: 250},
+        {left: 550, top: 150},
+        {left: 250, top: 350},
+		{left: 650, top: 250}
+    ]
 
-	moveEnemies();
-	drawEnemies();
-    setTimeout(gameLoop, 1000)
-	
-}
-gameLoop();	
+    var missiles = []
+
+    function drawPlayer(){
+        content = "<div class='player' style='left:"+player.left+"px; top:"+player.top+"px'></div>";
+        document.getElementById("players").innerHTML = content;
+    }
+
+    function drawEnemies(){
+        content = "";
+        console.log(enemies);
+        for(var idx=0; idx<enemies.length; idx++){
+            content += "<div class='enemy' style='left:"+enemies[idx].left+"px; top:"+enemies[idx].top+"px'></div>";
+        }
+        document.getElementById("enemies").innerHTML = content;
+    }
+
+    function drawMissiles(){
+        content = "";
+        for(var idx=0; idx<missiles.length; idx++){
+            content += "<div class='missile' style='left:"+missiles[idx].left+"px; top:"+missiles[idx].top+"px'></div>"
+        }
+        document.getElementById("missiles").innerHTML = content;
+    }
+
+    function moveEnemies(){
+        for(var idx=0; idx<enemies.length; idx++){
+            enemies[idx].top = enemies[idx].top + 1;
+        }
+    }
+
+    function moveMissiles(){
+        for(var idx=0; idx<missiles.length; idx++){
+            missiles[idx].top = missiles[idx].top - 4;
+        }
+    }
+
+    document.onkeydown = function(e) {
+        console.log(e);
+        if(e.keyCode == 37){ // left
+            player.left = player.left - 10;
+        }
+        if(e.keyCode == 39){ // right
+            player.left = player.left + 10;
+        }
+        if(e.keyCode == 38 && player.top > 500){ // up
+            player.top = player.top - 10;
+        }       
+        if(e.keyCode == 40 && player.top < 625){ // down
+            player.top = player.top + 10;
+        }
+        if(e.keyCode == 32){ //fire
+            missiles.push( {left: (player.left+34), top: (player.top - 8) } )
+            drawPlayer();
+        }
+		console.log(missiles);
+
+        drawPlayer();       
+    }
 
 
-		
-	</script>
+    function gameLoop(){
+        console.log("gameLoop is running!")
+
+        drawPlayer();
+
+        moveEnemies();
+        drawEnemies();
+
+        moveMissiles()
+        drawMissiles();
+
+        setTimeout(gameLoop, 10)
+    }
+
+
+    </script>
 </body>
 </html>
