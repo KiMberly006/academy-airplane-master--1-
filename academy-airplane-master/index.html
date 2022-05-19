@@ -24,13 +24,20 @@
 			width: 70px;
 			height: 75px;
 		}
-	</style>
+	</style> 
 
 <div id= "ocean">
-    <div id="player"></div>
-	<div id="enemies"></div>
+    <div id="players"></div>
+	<div class="player" style="left: 450px; top: 620px"></div>
 </div>
-
+   <div id="enemies">
+	<div class="enemy" style="left: 350px; top: 200px"></div>
+	<div class="enemy" style="left: 450px; top: 250px"></div>
+	<div class="enemy" style="left: 250px; top: 250px"></div>
+	<div class="enemy" style="left: 550px; top: 200px"></div>
+	<div class="enemy" style="left: 150px; top: 200px"></div>
+   </div>
+</div>
 	<script type="text/javascript">
 	var player = {
 		left: 450,
@@ -45,10 +52,9 @@
 ]
 
 function drawPlayer(){
-    content = <div class='player' style='left:"+player.left+"px; top+" px'></div>;
+    content = <div class='player' style='left: "+player.left+"px; top+" px'></div>;
 	document.getElementById("players").innerHTML= content;
 } 
-drawPlayer();
 
 function drawEnemies(){
     content = "";
@@ -59,9 +65,14 @@ function drawEnemies(){
     } 
 	document.getElementById("enemies").innerHTML = content;
 }	
-drawEnemies();
 
-document.onkeydown = function(e) {  
+function moveEnemies(){ 
+	for(var idx=0; idx<enemies.length; idx++){ 
+		enemies[idx].tpo = enemies[idx].top + 5;
+	}
+}		
+
+document.onkeydown = function(e) {    
 	console.log(e);
 	if(e.keyCode == 37){
 		player.left = player.left - 10;
@@ -80,10 +91,15 @@ document.onkeydown = function(e) {
 
 function gameLoop(){
 	console.log("gameLoop is running!")
-    
+    drawPlayer();
+
+	moveEnemies();
+	drawEnemies();
     setTimeout(gameLoop, 1000)
+	
 }
 gameLoop();	
+
 
 		
 	</script>
